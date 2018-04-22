@@ -41,7 +41,7 @@ Important changes - since we are sending a small amount of data every x minutes 
 
 1m:1d,5m:2y and a xFilesFactor = 0 So the non streaming data would be retained. In our cased we say that one days worth of data would contain datapoints from within a 1 minute window. We set the the "xFilesFactor" to 0 since we only send one data packet to the whisper database and there is no need to sample or have carbon work with a ratio of packets.
 
-srcs/python/feed_kitty.py
+srcs/python/feedkitty.py
 
 this is a simple python script that does 2 things
 

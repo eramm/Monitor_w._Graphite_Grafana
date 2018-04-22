@@ -1,0 +1,39 @@
+#!/usr/bin/python3.4
+import os
+import sys
+import re
+import subprocess
+from subprocess import Popen, PIPE
+pipe = Popen(
+    'whisper-fetch --pretty --from=$(date +%s -d \"-15 min\") /var/lib/graphite/whisper/pets/cat/food/count.wsp | awk \'{print $6}\' | grep -v \"None\" ', shell=True, stdout=PIPE)
+
+total = 0
+
+for line in pipe.stdout:
+    line = line.decode("utf-8")
+    line = line.strip()
+    line = re.sub('\..*', '', line)
+    line = int(line)
+#    print(line)
+    total = total + line
+#    print(total)
+
+post2carbon = "echo \"pets.gauges.cat.full" + str(total)  + " `date +%s` \" | nc -q0 127.0.0.1 2003"
+
+
+if total == 50:
+    print("OK - Kitty Has Been Fed")
+    subprocess.call(post2carbon, shell=True)
+    sys.exit(0)
+elif total == 25:
+    print("WARNING Kitty Only Got One Snack")
+    subprocess.call(post2carbon, shell=True)	
+    sys.exit(1)
+elif total == 0:
+    print("WARNING KITTY HAS NOT BEEN FED !!!")
+    subprocess.call(post2carbon, shell=True)
+    sys.exit(2)
+else:
+    print("UKNOWN - Has anyone seen Kitty ? Total was " + str(total) )
+    sys.exit(3)
+
