@@ -12,8 +12,4 @@ serving = menu.get(catfood)
 
 post2carbon = "echo \"pets.cat.food.count " + serving + " `date +%s` \" | nc -q0 127.0.0.1 2003"
 
-#print(post2carbon)
-
-#subprocess.call('echo \"pets.cat.count " + serving + " `date +%s` \" | nc -q0 127.0.0.1 2003', shell=True)
-
 subprocess.call(post2carbon, shell=True)
